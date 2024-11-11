@@ -1,31 +1,30 @@
 import {
   ConflictException,
-  Inject,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { User } from './schemas/user.schema';
-import { Db, Collection, WithId } from 'mongodb';
-import { DATABASE_CONNECTION } from '../database/database.providers';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UserView } from './views/user.view';
 import { UserDto } from './dto/user.dto';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
 
 @Injectable()
 export class UsersService {
-  private readonly userCollection: Collection;
-
-  constructor(@Inject(DATABASE_CONNECTION) private readonly db: Db) {
-    this.userCollection = this.db.collection('users');
-  }
+  constructor(
+    @InjectModel(User.name) private readonly userModel: Model<User>,
+  ) {}
 
   async createUser(
     createUserBody: CreateUserDto,
   ): Promise<UserDto | UserDto[]> {
-    const existingUser = (await this.userCollection.findOne({
-      username: createUserBody.username,
-    })) as WithId<User> | null;
+    const existingUser = await this.userModel
+      .findOne({
+        username: createUserBody.username,
+      })
+      .exec();
 
     if (existingUser) {
       throw new ConflictException('User already exists');
@@ -34,23 +33,19 @@ export class UsersService {
     const { name, username, password } = createUserBody;
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const user = await this.userCollection.insertOne({
+    const user = await this.userModel.create({
       name,
       username,
       password: hashedPassword,
     });
 
-    const newUser = (await this.userCollection.findOne({
-      _id: user.insertedId,
-    })) as WithId<User>;
-
-    return new UserView(newUser).render();
+    return new UserView(user).render();
   }
 
   async findByUsername(username: string): Promise<User> {
-    const user = (await this.userCollection.findOne({
+    const user = await this.userModel.findOne({
       username,
-    })) as WithId<User>;
+    });
 
     if (!user) {
       throw new NotFoundException('User not found');
