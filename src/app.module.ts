@@ -6,6 +6,7 @@ import { UsersModule } from './users/users.module';
 import { MoviesModule } from './movies/movies.module';
 import { DatabaseModule } from './database/database.module';
 import { ReviewsModule } from './reviews/reviews.module';
+import { WatchlistModule } from './watchlist/watchlist.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -16,6 +17,7 @@ import { ReviewsModule } from './reviews/reviews.module';
     DatabaseModule,
     ReviewsModule,
     UsersModule,
+    WatchlistModule,
   ],
   controllers: [AppController],
   providers: [AppService],
