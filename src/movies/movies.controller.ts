@@ -9,6 +9,7 @@ import {
   ValidationPipe,
   Query,
   BadRequestException,
+  UseInterceptors,
 } from '@nestjs/common';
 import { MoviesService } from './movies.service';
 import { CreateMovieDto } from './dto/create-movie.dto';
@@ -23,6 +24,7 @@ import { FindAllMoviesDto } from './dto/find-all-movies.dto';
 import { Movie } from './schemas/movie.schema';
 import { MoviesIndexDto } from './dto/movies-index-dto';
 import { MovieFilterDto } from './dto/movie-filters.to';
+import { CachingInterceptor } from 'src/shared/cache-interceptor';
 
 @Controller('movies')
 export class MoviesController {
@@ -34,6 +36,7 @@ export class MoviesController {
   }
 
   @Get()
+  @UseInterceptors(CachingInterceptor)
   @ApiOkResponse({
     description: 'List of Paginated Movies',
     type: MoviesIndexDto,
