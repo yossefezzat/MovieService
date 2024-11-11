@@ -4,11 +4,12 @@ import { UsersController } from './users.controller';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { AuthService } from './auth/auth.service';
-import { DatabaseModule } from '../database/database.module';
+import { User, UserSchema } from './schemas/user.schema';
+import { MongooseModule } from '@nestjs/mongoose';
 
 @Module({
   imports: [
-    DatabaseModule,
+    MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
     PassportModule,
     JwtModule.register({
       secret: process.env.JWT_SECRET || 'defaultSecret',
