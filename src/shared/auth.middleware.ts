@@ -12,7 +12,6 @@ export class AuthMiddleware implements NestMiddleware {
 
   async use(req: AuthRequest, res: Response, next: () => any) {
     const authToken = this.getAuthTokenFromRequest(req);
-
     if (!authToken) {
       return res.status(HttpStatus.UNAUTHORIZED).send({
         errors: [
@@ -25,7 +24,9 @@ export class AuthMiddleware implements NestMiddleware {
     }
 
     try {
-      const decoded = this.jwtService.verify(authToken);
+      const decoded = await this.jwtService.verifyAsync(authToken, {
+        secret: process.env.JWT_SECRET,
+      });
       req.user = decoded;
       next();
     } catch (error) {
