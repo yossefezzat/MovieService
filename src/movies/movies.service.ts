@@ -44,10 +44,11 @@ export class MoviesService {
   }
 
   async findOne(id: string): Promise<Movie> {
-    const movie = await this.movieModel.findById(id).exec();
+    const movieId = new Types.ObjectId(id);
+    const movie = await this.movieModel.findById(movieId);
 
     if (!movie) {
-      throw new Error(`Movie with id ${id} not found`);
+      throw new NotFoundException(`Movie with id ${id} not found`);
     }
 
     return movie;
@@ -104,5 +105,27 @@ export class MoviesService {
       }
     }
     return query;
+  }
+
+  async updateRatingAndCount(id: string, newRating: number): Promise<void> {
+    const movieId = new Types.ObjectId(id);
+    const movie = await this.movieModel.findById(movieId);
+    if (!movie) {
+      throw new NotFoundException('Movie not found');
+    }
+
+    // Compute the delta for the new averageRating
+    const ratingIncrement =
+      (newRating - movie.averageRating) / (movie.rateCount + 1);
+
+    await this.movieModel.updateOne(
+      { _id: movieId },
+      {
+        $inc: {
+          rateCount: 1,
+          averageRating: ratingIncrement,
+        },
+      },
+    );
   }
 }
