@@ -16,9 +16,11 @@ export class ReviewsService {
     private readonly movieService: MoviesService,
   ) {}
 
-  async createReview(createReviewDto: CreateReviewDto): Promise<Review> {
-    const { userId, movieId, rating, reviewText } = createReviewDto;
-
+  async createReview(
+    userId: string,
+    createReviewDto: CreateReviewDto,
+  ): Promise<Review> {
+    const { movieId, rating, reviewText } = createReviewDto;
     const existingMovie = await this.movieService.findOne(movieId);
     if (!existingMovie) {
       throw new NotFoundException('Movie not found');

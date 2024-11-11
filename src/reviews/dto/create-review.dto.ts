@@ -9,10 +9,6 @@ import {
 } from 'class-validator';
 
 export class CreateReviewDto {
-  @ApiProperty({ description: 'User ID', example: '64b1d4f5c3f02a432f324c76' })
-  @IsNotEmpty()
-  userId: string;
-
   @ApiProperty({ description: 'Movie ID', example: '64b1d4f5c3f02a432f324a12' })
   @IsNotEmpty()
   movieId: string;

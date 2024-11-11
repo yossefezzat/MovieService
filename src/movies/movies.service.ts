@@ -71,7 +71,7 @@ export class MoviesService {
     const movieId = new Types.ObjectId(id);
     const result = await this.movieModel.findByIdAndDelete(movieId);
     if (!result) {
-      throw new Error('Movie not found');
+      throw new NotFoundException('Movie not found');
     }
     return `Movie with ID ${id} deleted successfully`;
   }
