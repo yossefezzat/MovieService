@@ -1,73 +1,170 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# **TMDB CRUD Application**
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+A RESTful application that interacts with **The Movie Database (TMDB)** API to manage movie data. This application allows users to view, rate, and manage watchlists or favorites. It leverages **NestJS** for the backend and includes features such as caching, pagination, and filtering by genre.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+---
 
-## Description
+## **Table of Contents**
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+- [Features](#features)
+- [Prerequisites](#prerequisites)
+- [Installation](#installation)
+- [Running the Application](#running-the-application)
+- [API Endpoints](#api-endpoints)
+- [Project Structure](#project-structure)
+- [Technologies Used](#technologies-used)
+- [Testing](#testing)
+- [Caching Mechanism](#caching-mechanism)
+- [API Documentation](#api-documentation)
 
-## Installation
+---
 
-```bash
-$ npm install
+## **Features**
+
+- CRUD operations for movies.
+- Integration with **TMDB API** to fetch and sync movie data.
+- User interactions:
+  - Rate a movie (with average rating calculation).
+  - Add to watchlist or mark as favorite.
+- Search, filter, and paginate movie data.
+- Caching to reduce database calls.
+- Filter by genre (e.g., Action, Thriller, Horror).
+
+---
+
+## **Prerequisites**
+
+- [Node.js](https://nodejs.org/) (v18+ recommended)
+- [NestJs](https://docs.nestjs.com/)
+- [Docker](https://www.docker.com/)
+- [Git](https://git-scm.com/)
+- [Redis](https://redis.io/)
+- TMDB API Key (Register for free [here](https://www.themoviedb.org/))
+
+---
+
+## **Installation**
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/yossefezzat/MovieService.git
+   cd MovieService
+   ```
+
+2. Create a `.env` file in the project root:
+   ```env
+   PORT=8000
+   JWT_SECRET=
+   JWT_EXPIRATION_DURATION=1hr
+   DATABASE_USERNAME=
+   DATABASE_PASSWORD=
+   DATABASE_NAME=  
+   DATABASE_HOST=
+   CACHE_DEFAULT_TTL=
+   CACHE_TTL_MAP={ "route": 180000 }
+   DEFAULT_PAGE_SIZE=10
+   REDIS_HOST=
+   REDIS_PORT=
+   REDIS_PASSWORD=
+   REDIS_USERNAME=
+   REDIS_CACHE_DATABASE_NUMBER=0
+   ```
+
+3. Install dependencies:
+   ```bash
+   npm install
+   ```
+
+---
+
+## **Running the Application**
+
+### Using Docker:
+1. Build and start the application:
+   ```bash
+   docker-compose up --build
+   ```
+
+2. The app will be available at [http://localhost:8080](http://localhost:8080).
+
+### Without Docker:
+1. Start the database (PostgreSQL) locally.
+2. Run the application:
+   ```bash
+   npm run start
+   ```
+
+---
+
+## **Main API Endpoints**
+
+### **Movies**
+- `GET moviesservice/movies` - List all movies with pagination and filtering.
+- `GET moviesservice/movies/:id` - Get details of a specific movie.
+- `POST moviesservice/movies` - Add a new movie.
+- `PUT moviesservice/movies/:id` - Update an existing movie.
+- `DELETE moviesservice/movies/:id` - Delete a movie.
+
+### **User Interactions**
+- `POST moviesservice/reviews/            ` - Rate a movie.
+- `POST moviesservice/watchlist/:movieId/` - Add a movie to the watchlist.
+
+---
+
+## **Project Structure**
+
+```
+src/
+├── app.module.ts          # Main module
+├── movies/                # Movies module
+│   ├── movies.controller.ts
+│   ├── movies.service.ts
+│   ├── dto/              # Data transfer objects
+│   ├── schemas/          # Database entities
+├── reviews/              # Movies module
+│   ├── reviews.controller.ts
+│   ├── reviews.service.ts
+│   ├── dto/              # Data transfer objects
+│   ├── schemas/          # Database entities
+├── watchlist/               # Movies module
+│   ├── watchlist.controller.ts
+│   ├── watchlist.service.ts
+│   ├── dto/              # Data transfer objects
+│   ├── schemas/          # Database entities
+└── shared/               # Shared utilities, interceptors, and filters
 ```
 
-## Running the app
+---
 
-```bash
-# development
-$ npm run start
+## **Technologies Used**
 
-# watch mode
-$ npm run start:dev
+- **NestJS**: Backend framework.
+- **MongoDB**: Database.
+- **Docker & Docker Compose**: Containerization.
+- **TMDB API**: External movie data source.
+- **Redis**: Caching (optional, if used).
 
-# production mode
-$ npm run start:prod
-```
+---
 
-## Test
+## **Testing**
 
-```bash
-# unit tests
-$ npm run test
+Unit tests are included to ensure functionality:
+- Run tests:
+  ```bash
+  npm run test
+  ```
 
-# e2e tests
-$ npm run test:e2e
+---
 
-# test coverage
-$ npm run test:cov
-```
+## **Caching Mechanism**
 
-## Support
+To reduce database calls, caching is implemented using **Redis**.
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+---
 
-## Stay in touch
+## **API Documentation**
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+API documentation is available via Swagger:
+- Access it at [http://localhost:8000/api](http://localhost:8000/api).
 
-## License
-
-Nest is [MIT licensed](LICENSE).
+---
