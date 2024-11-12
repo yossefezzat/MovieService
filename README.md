@@ -86,7 +86,7 @@ A RESTful application that interacts with **The Movie Database (TMDB)** API to m
    docker-compose up --build
    ```
 
-2. The app will be available at [http://localhost:8080](http://localhost:8080).
+2. The app will be available at [http://localhost:8000](http://localhost:8000).
 
 ### Without Docker:
 1. Start the database (PostgreSQL) locally.
