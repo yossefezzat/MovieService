@@ -156,6 +156,14 @@ Unit tests are included to ensure functionality:
 
 ---
 
+## **Security**
+
+- API Key Authentication
+
+This project uses API Key authentication to secure its endpoints. All API requests must include a valid API key in the request header.
+
+---
+
 ## **Caching Mechanism**
 
 To reduce database calls, caching is implemented using **Redis**.
