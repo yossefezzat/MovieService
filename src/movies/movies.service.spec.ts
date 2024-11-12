@@ -50,7 +50,7 @@ describe('MoviesService', () => {
         overview: 'test',
         genre_ids: [1, 2, 3],
       };
-      const mockMovie = { id: 'movieId', ...createMovieDto };
+      const mockMovie = { ...createMovieDto };
       mockMovieModel.create.mockResolvedValue(mockMovie);
 
       const result = await service.create(createMovieDto);
@@ -98,7 +98,7 @@ describe('MoviesService', () => {
   describe('findOne', () => {
     it('should return a movie by ID', async () => {
       const movieId = new Types.ObjectId().toHexString();
-      const mockMovie = { id: movieId, title: 'Inception' };
+      const mockMovie = { title: 'Inception' };
       mockMovieModel.findById.mockResolvedValue(mockMovie);
 
       const result = await service.findOne(movieId);
@@ -121,7 +121,7 @@ describe('MoviesService', () => {
     it('should update and return the movie', async () => {
       const movieId = new Types.ObjectId().toHexString();
       const updateMovieDto = { title: 'Updated Title' };
-      const mockUpdatedMovie = { id: movieId, ...updateMovieDto };
+      const mockUpdatedMovie = { ...updateMovieDto };
 
       mockMovieModel.findByIdAndUpdate.mockResolvedValue(mockUpdatedMovie);
 

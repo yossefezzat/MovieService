@@ -31,7 +31,7 @@ export class MoviesController {
   constructor(private readonly moviesService: MoviesService) {}
 
   @Post()
-  create(@Body() createMovieDto: CreateMovieDto) {
+  create(@Body(new ValidationPipe()) createMovieDto: CreateMovieDto) {
     return this.moviesService.create(createMovieDto);
   }
 

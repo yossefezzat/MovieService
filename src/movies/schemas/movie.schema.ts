@@ -1,16 +1,9 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { ApiProperty } from '@nestjs/swagger';
-import { Document, Types } from 'mongoose';
+import { Document } from 'mongoose';
 
 @Schema()
 export class Movie extends Document {
-  @ApiProperty({
-    description: 'The unique ID of the movie',
-    example: '60c72b2f9e6f8c001f3a1b76',
-  })
-  @Prop({ required: true })
-  _id: Types.ObjectId;
-
   @ApiProperty({
     description: 'The title of the movie',
     example: 'Venom',

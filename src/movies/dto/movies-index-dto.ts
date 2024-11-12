@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Movie } from '../schemas/movie.schema';
+import { MovieDto } from './movie.dto';
 
 export class MoviesIndexDto {
   @ApiProperty({
@@ -17,5 +18,5 @@ export class MoviesIndexDto {
   readonly totalCount: number;
 
   @ApiProperty({ type: [Movie], description: 'List of movies in row.' })
-  readonly movies: Movie[];
+  readonly movies: MovieDto | MovieDto[];
 }

@@ -1,22 +1,18 @@
 import { ApiProperty } from '@nestjs/swagger';
-import {
-  IsNotEmpty,
-  IsString,
-  IsOptional,
-  IsArray,
-  IsNumber,
-  ArrayMinSize,
-  Min,
-} from 'class-validator';
 
-export class CreateMovieDto {
+export class MovieDto {
+  @ApiProperty({
+    description: '_id of the movie',
+    type: String,
+    example: 'id',
+  })
+  readonly _id: string;
+
   @ApiProperty({
     description: 'Title of the movie',
     type: String,
     example: 'Venom',
   })
-  @IsNotEmpty()
-  @IsString()
   readonly title: string;
 
   @ApiProperty({
@@ -24,8 +20,6 @@ export class CreateMovieDto {
     type: String,
     example: 'A movie about Venom, the antihero',
   })
-  @IsNotEmpty()
-  @IsString()
   readonly overview: string;
 
   @ApiProperty({
@@ -33,9 +27,6 @@ export class CreateMovieDto {
     type: [Number],
     example: [1, 2, 3],
   })
-  @IsNotEmpty()
-  @IsArray()
-  @ArrayMinSize(1)
   readonly genre_ids: number[];
 
   @ApiProperty({
@@ -44,8 +35,6 @@ export class CreateMovieDto {
     example: 'Venom: Let There Be Carnage',
     required: false,
   })
-  @IsOptional()
-  @IsString()
   readonly original_title?: string;
 
   @ApiProperty({
@@ -55,10 +44,7 @@ export class CreateMovieDto {
     required: false,
     default: 0,
   })
-  @IsOptional()
-  @IsNumber()
-  @Min(0)
-  readonly averageRating?: number = 0;
+  readonly averageRating?: number;
 
   @ApiProperty({
     description: 'Number of ratings the movie has received',
@@ -67,8 +53,5 @@ export class CreateMovieDto {
     required: false,
     default: 0,
   })
-  @IsOptional()
-  @IsNumber()
-  @Min(0)
-  readonly rateCount?: number = 0;
+  readonly rateCount?: number;
 }
