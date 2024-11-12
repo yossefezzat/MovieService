@@ -23,8 +23,8 @@ import {
 import { FindAllMoviesDto } from './dto/find-all-movies.dto';
 import { Movie } from './schemas/movie.schema';
 import { MoviesIndexDto } from './dto/movies-index-dto';
-import { MovieFilterDto } from './dto/movie-filters.to';
-import { CachingInterceptor } from 'src/shared/cache-interceptor';
+import { MovieFilterDto } from './dto/movie-filters.dto';
+import { CachingInterceptor } from '../shared/cache-interceptor';
 
 @Controller('movies')
 export class MoviesController {

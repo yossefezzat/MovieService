@@ -5,7 +5,7 @@ import { Movie } from './schemas/movie.schema';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import { Genre } from './schemas/genre.schema';
-import { MovieFilterDto } from './dto/movie-filters.to';
+import { MovieFilterDto } from './dto/movie-filters.dto';
 
 @Injectable()
 export class MoviesService {
