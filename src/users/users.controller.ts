@@ -6,6 +6,7 @@ import { LoginUserDto } from './dto/login-user.dto';
 import {
   ApiConflictResponse,
   ApiCreatedResponse,
+  ApiHeader,
   ApiNotFoundResponse,
 } from '@nestjs/swagger';
 import { UserDto } from './dto/user.dto';
@@ -23,6 +24,11 @@ export class UsersController {
     description: 'User successfully Created',
     type: UserDto,
   })
+  @ApiHeader({
+    name: 'x-apiKey',
+    description: 'API key to access the endpoint',
+    required: true,
+  })
   async register(@Body(new ValidationPipe()) createUserDto: CreateUserDto) {
     return this.usersService.createUser(createUserDto);
   }
@@ -32,6 +38,11 @@ export class UsersController {
   @ApiCreatedResponse({
     description: 'User successfully loggedin',
     type: UserDto,
+  })
+  @ApiHeader({
+    name: 'x-apiKey',
+    description: 'API key to access the endpoint',
+    required: true,
   })
   async login(@Body(new ValidationPipe()) body: LoginUserDto) {
     const user = await this.authService.validateUser(

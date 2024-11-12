@@ -7,6 +7,7 @@ import {
   ApiOkResponse,
   ApiOperation,
   ApiParam,
+  ApiHeader,
 } from '@nestjs/swagger';
 import { Watchlist } from './schemas/watchlist.schema';
 
@@ -27,6 +28,11 @@ export class WatchlistController {
     description: 'Movie successfully added to the watchlist',
     type: Watchlist,
   })
+  @ApiHeader({
+    name: 'x-apiKey',
+    description: 'API key to access the endpoint',
+    required: true,
+  })
   async addToWatchlist(@Req() req, @Param('movieId') movieId: string) {
     const userId = req.user.id;
     return this.watchlistService.addToWatchlist(userId, movieId);
@@ -38,6 +44,11 @@ export class WatchlistController {
   @ApiOkResponse({
     description: 'The user’s watchlist retrieved successfully',
     type: [Watchlist],
+  })
+  @ApiHeader({
+    name: 'x-apiKey',
+    description: 'API key to access the endpoint',
+    required: true,
   })
   async getWatchlist(@Req() req) {
     const userId = req.user.id;
