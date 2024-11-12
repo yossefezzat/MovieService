@@ -68,6 +68,7 @@ A RESTful application that interacts with **The Movie Database (TMDB)** API to m
    REDIS_PASSWORD=
    REDIS_USERNAME=
    REDIS_CACHE_DATABASE_NUMBER=0
+   MOVIE_APP_API_KEY=movie-apikey
    ```
 
 3. Install dependencies:
