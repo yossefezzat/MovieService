@@ -68,6 +68,7 @@ A RESTful application that interacts with **The Movie Database (TMDB)** API to m
    REDIS_PASSWORD=
    REDIS_USERNAME=
    REDIS_CACHE_DATABASE_NUMBER=0
+   MOVIE_APP_API_KEY=movie-apikey
    ```
 
 3. Install dependencies:
@@ -85,7 +86,7 @@ A RESTful application that interacts with **The Movie Database (TMDB)** API to m
    docker-compose up --build
    ```
 
-2. The app will be available at [http://localhost:8080](http://localhost:8080).
+2. The app will be available at [http://localhost:8000](http://localhost:8000).
 
 ### Without Docker:
 1. Start the database (PostgreSQL) locally.
