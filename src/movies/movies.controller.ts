@@ -15,6 +15,9 @@ import { MoviesService } from './movies.service';
 import { CreateMovieDto } from './dto/create-movie.dto';
 import { UpdateMovieDto } from './dto/update-movie.dto';
 import {
+  ApiBody,
+  ApiCreatedResponse,
+  ApiHeader,
   ApiNotFoundResponse,
   ApiOkResponse,
   ApiOperation,
@@ -31,7 +34,21 @@ export class MoviesController {
   constructor(private readonly moviesService: MoviesService) {}
 
   @Post()
-  create(@Body(new ValidationPipe()) createMovieDto: CreateMovieDto) {
+  @ApiOperation({ summary: 'Create a new movie' })
+  @ApiHeader({
+    name: 'x-apiKey',
+    description: 'API key to access the endpoint',
+    required: true,
+  })
+  @ApiBody({
+    description: 'The movie data to be created',
+    type: CreateMovieDto,
+  })
+  @ApiCreatedResponse({
+    description: 'The movie has been successfully created.',
+    type: Movie,
+  })
+  create(@Body() createMovieDto: CreateMovieDto) {
     return this.moviesService.create(createMovieDto);
   }
 
@@ -62,6 +79,11 @@ export class MoviesController {
     type: String,
     example: "[{ field: 'title', value: 'venom' }]",
   })
+  @ApiHeader({
+    name: 'x-apiKey',
+    description: 'API key to access endpioint',
+    required: true,
+  })
   async findAll(
     @Query(new ValidationPipe()) query: FindAllMoviesDto,
   ): Promise<MoviesIndexDto> {
@@ -88,6 +110,11 @@ export class MoviesController {
     description: 'The movie has been successfully retrieved.',
     type: Movie,
   })
+  @ApiHeader({
+    name: 'x-apiKey',
+    description: 'API key to access endpioint',
+    required: true,
+  })
   findOne(@Param('id') id: string) {
     return this.moviesService.findOne(id);
   }
@@ -98,6 +125,11 @@ export class MoviesController {
     type: Movie,
   })
   @ApiNotFoundResponse({ description: 'Movie not found.' })
+  @ApiHeader({
+    name: 'x-apiKey',
+    description: 'API key to access endpioint',
+    required: true,
+  })
   async update(
     @Param('id') id: string,
     @Body() updateMovieDto: UpdateMovieDto,
@@ -108,6 +140,11 @@ export class MoviesController {
   @Delete(':id')
   @ApiOkResponse({ description: 'The movie has been successfully deleted.' })
   @ApiNotFoundResponse({ description: 'Movie not found.' })
+  @ApiHeader({
+    name: 'x-apiKey',
+    description: 'API key to access endpioint',
+    required: true,
+  })
   async remove(@Param('id') id: string) {
     return this.moviesService.remove(id);
   }

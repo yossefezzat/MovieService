@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
@@ -7,6 +7,7 @@ import { MoviesModule } from './movies/movies.module';
 import { DatabaseModule } from './database/database.module';
 import { ReviewsModule } from './reviews/reviews.module';
 import { WatchlistModule } from './watchlist/watchlist.module';
+import { ApiKeyMiddleware } from './shared/api-key.middleware';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -22,4 +23,8 @@ import { WatchlistModule } from './watchlist/watchlist.module';
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(ApiKeyMiddleware).forRoutes('*');
+  }
+}

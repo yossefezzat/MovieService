@@ -11,6 +11,7 @@ import { Review, ReviewSchema } from './schemas/review.schema';
 import { MoviesModule } from '../movies/movies.module';
 import { AuthMiddleware } from '../shared/auth.middleware';
 import { JwtService } from '@nestjs/jwt';
+import { ApiKeyMiddleware } from 'src/shared/api-key.middleware';
 
 @Module({
   imports: [
@@ -26,5 +27,7 @@ export class ReviewsModule implements NestModule {
       .apply(AuthMiddleware)
       .exclude({ path: '/reviews/movie/:movieId', method: RequestMethod.GET })
       .forRoutes(ReviewsController);
+
+    consumer.apply(ApiKeyMiddleware).forRoutes(ReviewsController);
   }
 }

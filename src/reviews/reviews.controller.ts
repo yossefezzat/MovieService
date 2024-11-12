@@ -7,6 +7,7 @@ import {
   ApiOkResponse,
   ApiParam,
   ApiBearerAuth,
+  ApiHeader,
 } from '@nestjs/swagger';
 import { Review } from './schemas/review.schema';
 
@@ -21,6 +22,11 @@ export class ReviewsController {
     type: Review,
   })
   @ApiBearerAuth()
+  @ApiHeader({
+    name: 'x-apiKey',
+    description: 'API key to access the endpoint',
+    required: true,
+  })
   async createReview(
     @Body() createReviewDto: CreateReviewDto,
     @Req() req,
@@ -38,6 +44,11 @@ export class ReviewsController {
     name: 'movieId',
     description: 'The ID of the movie to retrieve reviews for',
     type: String,
+  })
+  @ApiHeader({
+    name: 'x-apiKey',
+    description: 'API key to access the endpoint',
+    required: true,
   })
   async findReviewsByMovie(
     @Param('movieId') movieId: string,
