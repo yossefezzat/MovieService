@@ -6,6 +6,8 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import { Genre } from './schemas/genre.schema';
 import { MovieFilterDto } from './dto/movie-filters.dto';
+import { MovieView } from './views/movie.view';
+import { MovieDto } from './dto/movie.dto';
 
 @Injectable()
 export class MoviesService {
@@ -14,7 +16,7 @@ export class MoviesService {
     @InjectModel(Genre.name) private readonly genreModel: Model<Genre>,
   ) {}
 
-  async create(createMovieDto: CreateMovieDto): Promise<Movie> {
+  async create(createMovieDto: CreateMovieDto): Promise<MovieDto | MovieDto[]> {
     const movie = {
       ...createMovieDto,
       averageRating: 0,
@@ -22,14 +24,18 @@ export class MoviesService {
     };
 
     const result = await this.movieModel.create(movie);
-    return result;
+    return new MovieView(result).render();
   }
 
   async findAll(
     page?: number,
     limit?: number,
     filters?: MovieFilterDto[],
-  ): Promise<{ movies: Movie[]; totalPages: number; totalCount: number }> {
+  ): Promise<{
+    movies: MovieDto | MovieDto[];
+    totalPages: number;
+    totalCount: number;
+  }> {
     const skip = (page - 1) * limit;
     const query = await this.buildMoviesFilters(filters);
 
@@ -40,10 +46,10 @@ export class MoviesService {
 
     const totalPages = Math.ceil(totalCount / limit);
 
-    return { movies, totalPages, totalCount };
+    return { movies: new MovieView(movies).render(), totalPages, totalCount };
   }
 
-  async findOne(id: string): Promise<Movie> {
+  async findOne(id: string): Promise<MovieDto | MovieDto[]> {
     const movieId = new Types.ObjectId(id);
     const movie = await this.movieModel.findById(movieId);
 
@@ -51,10 +57,13 @@ export class MoviesService {
       throw new NotFoundException(`Movie with id ${id} not found`);
     }
 
-    return movie;
+    return new MovieView(movie).render();
   }
 
-  async update(id: string, updateMovieDto: UpdateMovieDto): Promise<Movie> {
+  async update(
+    id: string,
+    updateMovieDto: UpdateMovieDto,
+  ): Promise<MovieDto | MovieDto[]> {
     const movieId = new Types.ObjectId(id);
     const updatedMovie = await this.movieModel.findByIdAndUpdate(
       movieId,
@@ -64,7 +73,7 @@ export class MoviesService {
     if (!updatedMovie) {
       throw new NotFoundException('Movie not found');
     }
-    return updatedMovie;
+    return new MovieView(updatedMovie).render();
   }
 
   async remove(id: string): Promise<string> {
