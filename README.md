@@ -41,7 +41,7 @@ A RESTful application that interacts with **The Movie Database (TMDB)** API to m
 - [Redis](https://redis.io/)
 - TMDB API Key (Register for free [here](https://www.themoviedb.org/))
 
-- Seedimg stage:
+- Seeding stage:
    - After the app is up we will need to run the migration file found in the /bin file with the credentials of the database inside (.env.staging) Env.
    - In this migration we got the movies and movies genres.
 
@@ -186,5 +186,6 @@ API documentation is available via Swagger:
 - We need to make a cloud task to run daily to seed our database with movies by created_date
 - We need to intialize admin/moderator role and lock the movies creation and deletion and update endpoints
 - Adding schema validation for envs, and load it from remote provider to store env secrets
+- Introduce monitoring by adding logger module.
 
 ---
